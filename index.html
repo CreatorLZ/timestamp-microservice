@@ -33,7 +33,7 @@
 
   const dateValue = dateInput.value.trim() || ''; // Handle empty input
   try {
-    const response = await fetch(`http://localhost:3000/api/${dateValue}`);
+    const response = await fetch(`/api/${dateValue}`);
     
     // Check if response is ok
     if (!response.ok) {
