@@ -1,49 +1,48 @@
+// api/index.js
 import express from "express";
 import cors from "cors";
 
-//initialize a new express project
-
+// Initialize a new express project
 const app = express();
 
-// enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
-// so that your API is remotely testable by Freecodecamp
-
+// Enable CORS for cross-origin requests
 app.use(cors({ optionsSuccessStatus: 200 }));
 
-//serve static files
-
+// Serve static files (if needed in the future)
 app.use(express.static("public"));
 
-//first endpoint
-
+// First endpoint - Handle the date conversion logic
 app.get("/api/:date?", (req, res) => {
   const { date } = req.params;
   let result;
 
-  // If no date is provided, return current date
   if (!date) {
+    // No date provided, use the current date
     result = new Date();
   } else {
-    // Check if it's a Unix timestamp or a date string
+    // Check if the provided date is a valid number (timestamp) or date string
     result = isNaN(date) ? new Date(date) : new Date(parseInt(date));
   }
 
-  // If date is invalid, return the error
+  // Handle invalid dates
   if (result.toString() === "Invalid Date") {
-    res.json({
+    return res.json({
       error: "Invalid Date",
     });
-  } else {
-    // Return both unix and utc formats
-    res.json({
-      unix: result.getTime(),
-      utc: result.toUTCString(),
-    });
   }
+
+  // Return the Unix and UTC time
+  res.json({
+    unix: result.getTime(),
+    utc: result.toUTCString(),
+  });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`server running on ${PORT}`);
-});
+// Export the app as a Vercel serverless function
 export default app;
+
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`server running on ${PORT}`);
+// });
+// export default app;
