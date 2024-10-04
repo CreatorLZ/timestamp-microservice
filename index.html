@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -59,4 +59,66 @@
   </script>
 </body>
 </html>
+ -->
 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timestamp Microservice</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Timestamp Microservice</h1>
+    <p>Enter a natural date (e.g., "January 1, 2024") or a Unix timestamp:</p>
+
+    <form id="timestampForm">
+      <input type="text" id="dateInput" placeholder="Enter a date or timestamp">
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="result">
+      <p><strong>Unix Timestamp:</strong> <span id="unix"></span></p>
+      <p><strong>UTC Date:</strong> <span id="utc"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('timestampForm');
+    const dateInput = document.getElementById('dateInput');
+    const unixDisplay = document.getElementById('unix');
+    const utcDisplay = document.getElementById('utc');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const dateValue = dateInput.value.trim() || ''; // Handle empty input
+
+      try {
+        const response = await fetch(`/api/${dateValue}`);
+        
+        // Check if response is ok
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+          unixDisplay.textContent = data.error;
+          utcDisplay.textContent = data.error;
+        } else {
+          unixDisplay.textContent = data.unix;
+          utcDisplay.textContent = data.utc;
+        }
+      } catch (error) {
+        console.error("Fetch error: ", error);
+        unixDisplay.textContent = "Error fetching data";
+        utcDisplay.textContent = "Error fetching data";
+      }
+    });
+  </script>
+</body>
+</html>
