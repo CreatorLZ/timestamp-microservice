@@ -33,7 +33,9 @@
 
   const dateValue = dateInput.value.trim() || ''; // Handle empty input
   try {
-    const response = await fetch(`/api/${dateValue}`);
+    // const response = await fetch(`/api/${dateValue}`);
+    const response = await fetch(`https://timestamp-microservice-tan.vercel.app/api/${dateValue}`);
+
     
     // Check if response is ok
     if (!response.ok) {
