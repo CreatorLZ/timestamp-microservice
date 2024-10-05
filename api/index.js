@@ -41,8 +41,8 @@ app.get("/api/:date?", (req, res) => {
 // Export the app as a Vercel serverless function
 export default app;
 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`server running on ${PORT}`);
-// });
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`server running on ${PORT}`);
+});
 // export default app;
