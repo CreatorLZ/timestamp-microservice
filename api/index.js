@@ -109,12 +109,26 @@
 
 import express from "express";
 import cors from "cors";
-
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 
 // Enable CORS for cross-origin requests
 app.use(cors({ optionsSuccessStatus: 200 }));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // app.use(express.static("public"));
+// Only serve static files in production
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from the root directory
+  app.use(express.static(path.join(__dirname, "../..")));
+
+  // Serve the index.html from root directory for any unknown routes
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../../index.html"));
+  });
+}
 
 // Helper function to validate and process date
 function getDateResult(dateString) {
